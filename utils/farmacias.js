@@ -13,7 +13,7 @@ const farmacias_lucena = [
     'number':'2',
     'phone':'957500417',
     'location':'https://www.google.com/maps/dir//Farmacia+Aguilar,+C.+Alta+y+Baja,+2,+14900+Lucena,+C%C3%B3rdoba/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0xd6d70cbb0e38995:0x56aca93d3172d52b?sa=X&ved=2ahUKEwiN2YbGs4iEAxXO9QIHHZXCAkwQ48ADegQIFhAA',
-    'matcher':'Plaza Alta y Baja2'
+    'matcher':'Plaza Alta y Baja8'
   },
   {
     'name':'El Parque',
@@ -53,7 +53,7 @@ const farmacias_lucena = [
     'number':'0',
     'phone':'957590429',
     'location':'https://www.google.com/maps/dir//Farmacia+Jodral+Lucena,+C.+Juego+de+Pelota,+45,+14900+Lucena,+C%C3%B3rdoba/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0xd6d77349f3555ab:0xbdb3b0f1f37e923a?sa=X&ved=2ahUKEwiN2YbGs4iEAxXO9QIHHZXCAkwQ48ADegQIEBAA',
-    'matcher':'Juego de Pelota'
+    'matcher':'Juego de Pelota45'
   },
   {
     'name':'San Francisco',
@@ -102,6 +102,14 @@ const farmacias_lucena = [
     'phone':'957500048',
     'location':'https://www.google.com/maps/dir//Farmacia+Jim%C3%A9nez+G%C3%B3mez,+C.+el+Peso,+17,+14900+Lucena,+C%C3%B3rdoba/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0xd6d70c93d2ed0e5:0x9ae1a68446545647?sa=X&ved=2ahUKEwiN2YbGs4iEAxXO9QIHHZXCAkwQ48ADegQIDxAA',
     'matcher':'El Peso17'
+  },
+  {
+    'name':'Ortopedia Sicilia Ecija Maya Trócoli',
+    'direction':'Juan Jiménez Cuenca',
+    'number':'6',
+    'phone':'957501038',
+    'location':'',
+    'matcher':'Juan Jimenez de Cuenca6'
   }
 ]
 

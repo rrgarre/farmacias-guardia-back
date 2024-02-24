@@ -3,12 +3,12 @@ const puppeteer = require('puppeteer')
 const farmacias = require('../utils/farmacias').farmacias_lucena
 
 
-farmaciasRouter.get('/:dia', async (request, response) => {
+farmaciasRouter.get('/', async (request, response) => {
 
-    const DIAI = 5
-    const DIAF = 5
+    const DIAI = 1
+    const DIAF = 31
     const dia = request.params.dia
-    console.log('dia: ', dia)
+    // console.log('dia: ', dia)
     
     const browser = await puppeteer.launch({
         headless: false,
@@ -75,6 +75,8 @@ farmaciasRouter.get('/:dia', async (request, response) => {
       }
     })
 
+    console.log('NUEVA EJEC: ', new Date())
+    
     console.log(resultadoMix)
 
     return response.send(resultadoMix)
