@@ -5,8 +5,8 @@ const farmacias = require('../utils/farmacias').farmacias_lucena
 
 farmaciasRouter.get('/:dia', async (request, response) => {
 
-    const DIAI = 4
-    const DIAF = 4
+    const DIAI = 5
+    const DIAF = 5
     const dia = request.params.dia
     console.log('dia: ', dia)
     
@@ -55,43 +55,29 @@ farmaciasRouter.get('/:dia', async (request, response) => {
     await browser.close()
 
     
-    // console.log('XXX: ', data[0].tablaDia)
-    // const farmacia = farmacias.find(elem => {
-    //   return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === data[0].pijamaOscuroDia
-    // })
-    
-    // const result = data.map(elem => {
-    //   const farmacia1 = farmacias.find(elem => {
-    //     return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === data[0].pijamaOscuroDia
-    //   })
-    //   const farmacia2 = farmacias.find(elem => {
-    //     return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === data[0].pijamaClaroDia
-    //   })
-    //   const farmacia3 = farmacias.find(elem => {
-    //     return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === data[0].pijamaOscuroNoche
-    //   })
-    //   return {
-    //     ...elem, 
-    //     pijamaOscuroDia: farmacia1,
-    //     pijamaClaroDia: farmacia2,
-    //     pijamaOscuroNoche: farmacia3
-    //   }
-    // })
+    const resultadoMix = data.map(elem => {
+      const fondoDiaMixed = elem.fondoDia.map(farmacia => {
+        return farmacias.find(elem => {
+          return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === farmacia
+        })
+      })
 
+      const fondoNocheMixed = elem.fondoNoche.map(farmacia => {
+        return farmacias.find(elem => {
+          return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === farmacia
+        })
+      })
+      
+      return {
+        ...elem,
+        fondoDia: fondoDiaMixed,
+        fondoNoche: fondoNocheMixed
+      }
+    })
 
-    // console.log('result: ', result)
-    // console.log(farmacias)
-    
-    
-    console.log(data)
-    // console.log('--------------')
-    // console.log(farmacias)
-    
-    
+    console.log(resultadoMix)
 
-    return response.send(data)
-    // return response.send(result)
-    // return response.send(JSON.stringify(data))
+    return response.send(resultadoMix)
 })
 
 module.exports = farmaciasRouter
