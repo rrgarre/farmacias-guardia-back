@@ -11,7 +11,7 @@ farmaciasRouter.get('/', async (request, response) => {
     // console.log('dia: ', dia)
     
     const browser = await puppeteer.launch({
-        headless: false,
+        // headless: false,
         // slowMo:300
     })
     const page = await browser.newPage()
@@ -22,6 +22,7 @@ farmaciasRouter.get('/', async (request, response) => {
       try {
         const contenido = [...document.querySelectorAll('div.supercontenedor')]
           .map(fila => {
+            const ciudad = fila.querySelectorAll('td')[2].innerText
             const fecha = fila.querySelector('div.fecha').innerText
             const horarioDia = fila.querySelector('div.dia').innerText
             const fondoDia = [...fila
@@ -36,6 +37,7 @@ farmaciasRouter.get('/', async (request, response) => {
               .map(elem=>elem.innerText.replaceAll(' ', '').replaceAll(',','').toUpperCase())
             
             return {
+              ciudad,
               fecha,
               horarioDia,
               fondoDia,
