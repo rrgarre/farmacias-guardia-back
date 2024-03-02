@@ -10,6 +10,7 @@ farmaciasRouter.get('/', async (request, response) => {
     const currentDate = new Date()
     const currentDay = currentDate.getDate()
     const currentMonth = currentDate.getMonth()+1
+    const moreDays = 6
     // const dia = request.params.dia
     // console.log('dia: ', dia)
     
@@ -20,7 +21,7 @@ farmaciasRouter.get('/', async (request, response) => {
     const page = await browser.newPage()
     // await page.goto('https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=1&mes=02&ano=2024&diaf=4&mesf=02&anof=2024')
     // await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${DIAI}&mes=02&ano=2024&diaf=${DIAF}&mesf=02&anof=2024`)
-    await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${currentDay}&mes=${currentMonth}&ano=2024&diaf=${currentDay+1}&mesf=${currentMonth}&anof=2024`)
+    await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${currentDay}&mes=${currentMonth}&ano=2024&diaf=${currentDay+moreDays}&mesf=${currentMonth}&anof=2024`)
     // await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${dia}&mes=02&ano=2024&diaf=${dia}&mesf=02&anof=2024`)
     const data = await page.evaluate(() => {
       try {
