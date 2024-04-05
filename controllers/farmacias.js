@@ -7,7 +7,11 @@ farmaciasRouter.get('/', async (request, response) => {
 
     const DIAI = 1
     const DIAF = 31
+    const HOUR_OF_CHANGE = 9
     const currentDate = new Date()
+    if(currentDate.getHours() < HOUR_OF_CHANGE)
+      currentDate.setDate(currentDate.getDate() - 1)
+    //Ajuste del día por horario de madrugada
     const currentDay = currentDate.getDate()
     const currentMonth = currentDate.getMonth()+1
     const moreDays = 6
@@ -82,9 +86,11 @@ farmaciasRouter.get('/', async (request, response) => {
       }
     })
 
-    console.log('NUEVA EJEC: ', new Date().getDate())
+    // console.log('NUEVA EJEC: ', new Date().getDate())
+    // console.log(`El día actual es: ${currentDay}`)
+    // console.log(`La hora actual es: ${currentDate.getHours()}`)
     
-    console.log(resultadoMix)
+    // console.log(resultadoMix)
 
     return response.send(resultadoMix)
 })
