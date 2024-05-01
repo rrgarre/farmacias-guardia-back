@@ -5,15 +5,27 @@ const sequelize = require('../database')
 const Farmacia = sequelize.define(
   'Farmacia', 
   {
-    name: {
+    ciudad: {
       type: DataTypes.STRING
     },
-    email: {
+    fecha: {
+      type: DataTypes.STRING
+    },
+    horarioDia: {
+      type: DataTypes.STRING
+    },
+    listadoDia: {
+      type: DataTypes.STRING
+    },
+    horarioNoche: {
+      type: DataTypes.STRING
+    },
+    listadoNoche: {
       type: DataTypes.STRING
     }
   },
   {
-    tableName: 'farmacias',
+    tableName: 'farmacias-Lucena-14900',
   },
 )
 

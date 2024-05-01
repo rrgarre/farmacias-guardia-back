@@ -5,7 +5,7 @@ const getYear = async () => {
   return 'getYear(): farmacias de guardia del año XXXX'
 }
 
-const getSinceToday = async () => {
+const getSinceToday = async (extraDays) => {
   const DIAI = 1
   const DIAF = 31
   const HOUR_OF_CHANGE = 20
@@ -18,7 +18,8 @@ const getSinceToday = async () => {
   //Ajuste del día por horario de madrugada
   const currentDay = currentDate.getDate()
   const currentMonth = currentDate.getMonth()+1
-  const moreDays = 6
+  // const moreDays = 6
+  const moreDays = extraDays
   // const dia = request.params.dia
   // console.log('dia: ', dia)
   

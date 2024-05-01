@@ -1,5 +1,6 @@
 const farmacias_lucena = [
   {
+    'id':'Lucena-14900-1',
     'name':'Santiago 12',
     'direction':'Santiago',
     'number':'12',
@@ -8,6 +9,7 @@ const farmacias_lucena = [
     'matcher':'Santiago12'
   },
   {
+    'id':'Lucena-14900-2',
     'name':'Aguilar',
     'direction':'Plaza Alta y Baja',
     'number':'2',
@@ -16,6 +18,7 @@ const farmacias_lucena = [
     'matcher':'Plaza Alta y Baja8'
   },
   {
+    'id':'Lucena-14900-3',
     'name':'El Parque',
     'direction':'San Pedro',
     'number':'90',
@@ -24,6 +27,7 @@ const farmacias_lucena = [
     'matcher':'San Pedro90'
   },
   {
+    'id':'Lucena-14900-4',
     'name':'Ana Martínez Aguilar',
     'direction':'Junto a bar El Chato, Plaza del Mercado',
     'number':'38',
@@ -32,6 +36,7 @@ const farmacias_lucena = [
     'matcher':'Plaza del Mercado38-40'
   },
   {
+    'id':'Lucena-14900-5',
     'name':'Gómez Cerro',
     'direction':'Río Genil',
     'number':'46',
@@ -40,6 +45,7 @@ const farmacias_lucena = [
     'matcher':'Rio Genil46'
   },
   {
+    'id':'Lucena-14900-6',
     'name':'Estefanía Poveda',
     'direction':'Cabrillana',
     'number':'75',
@@ -48,6 +54,7 @@ const farmacias_lucena = [
     'matcher':'Cabrillana75'
   },
   {
+    'id':'Lucena-14900-7',
     'name':'Jodral',
     'direction':'Juego de Pelota',
     'number':'0',
@@ -56,6 +63,7 @@ const farmacias_lucena = [
     'matcher':'Juego de Pelota45'
   },
   {
+    'id':'Lucena-14900-8',
     'name':'San Francisco',
     'direction':'San Francisco',
     'number':'8',
@@ -64,6 +72,7 @@ const farmacias_lucena = [
     'matcher':'San Francisco8'
   },
   {
+    'id':'Lucena-14900-9',
     'name':'El Valle',
     'direction':'Málaga',
     'number':'30',
@@ -72,6 +81,7 @@ const farmacias_lucena = [
     'matcher':'Malaga30'
   },
   {
+    'id':'Lucena-14900-10',
     'name':'Arrebola',
     'direction':'Juan Valera',
     'number':'4',
@@ -80,6 +90,7 @@ const farmacias_lucena = [
     'matcher':'Juan Valera4'
   },
   {
+    'id':'Lucena-14900-11',
     'name':'Sicilia-Maya',
     'direction':'El Agua',
     'number':'10',
@@ -88,6 +99,7 @@ const farmacias_lucena = [
     'matcher':'El Agua10'
   },
   {
+    'id':'Lucena-14900-12',
     'name':'Ldo. Vicente Lama Montes',
     'direction':'Hoya del Molino',
     'number':'6',
@@ -96,6 +108,7 @@ const farmacias_lucena = [
     'matcher':'Hoya del Molino6'
   },
   {
+    'id':'Lucena-14900-13',
     'name':'Álvaro Jiménez Gómez',
     'direction':'El Peso',
     'number':'17',
@@ -104,6 +117,7 @@ const farmacias_lucena = [
     'matcher':'El Peso17'
   },
   {
+    'id':'Lucena-14900-14',
     'name':'Ortopedia Sicilia Ecija Maya Trócoli',
     'direction':'Juan Jiménez Cuenca',
     'number':'6',
