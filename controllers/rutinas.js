@@ -3,13 +3,21 @@ const puppeteer = require('puppeteer')
 const farmacias = require('../utils/farmacias').farmacias_lucena
 const { Sequelize, DataTypes } = require('sequelize')
 const Farmacia = require('../models/farmacia')
+const scrapFunctions = require('../utils/scrapFunctions')
 
 rutinasRouter.get('/', async (request, response) => {
+
+  const resultadoMix = await scrapFunctions.getSinceToday()
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   try {
 
     // Sincroniza el modelo con la base de datos
-    await Farmacia.sync({ force: true }) // Utiliza { force: true } solo en desarrollo para re-crear la tabla
+    // Utiliza { force: true } solo en desarrollo para re-crear la tabla
+    // await Farmacia.sync() 
+    await Farmacia.sync({ force: true }) 
 
     // Crea un usuario de ejemplo
     await Farmacia.create({ name: 'Rafa Dev2', email: 'rrgarre@gsd.vom' })
@@ -24,7 +32,8 @@ rutinasRouter.get('/', async (request, response) => {
     // await sequelize.close()
   }
 
-  return response.send('Hola desde Router de Rutinas')
+  // return response.send('Hola desde Router de Rutinas')
+  return response.send(resultadoMix)
 })
 
 module.exports = rutinasRouter
