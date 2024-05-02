@@ -1,6 +1,8 @@
 const farmaciasRouter = require('express').Router()
 const puppeteer = require('puppeteer')
-const farmacias = require('../utils/farmacias').farmacias_lucena
+const farmacias = require('../utils/farmacias-Lucena-14900').farmacias_lucena
+const GuardiaLucena14900 = require('../models/guardiaLucena14900')
+
 
 
 farmaciasRouter.get('/', async (request, response) => {
@@ -96,6 +98,27 @@ farmaciasRouter.get('/', async (request, response) => {
     // console.log(resultadoMix)
 
     return response.send(resultadoMix)
+})
+
+farmaciasRouter.get('/Lucena-14900', async (request, response) => {
+  const guardias = await GuardiaLucena14900.findAll()
+  const guardiasExtendidas = guardias.map(dia => {
+    const fondoDiaArray = dia.fondoDia.split(',')
+    console.log('FondoDiaArray: ', fondoDiaArray)
+    const fondoDiaExtendido = fondoDiaArray.map(farmaciaId => {
+      return farmacias.find(f=>f.id === farmaciaId)
+    })
+    console.log('FondoDiaExtendido: ', fondoDiaExtendido)
+
+    // :::: Construir el objeto campo a campo
+    return {
+      dia
+    }
+  })
+
+  // console.log('Todas las guardias: ', JSON.stringify(guardias, null, 2))
+  // console.log('Todas las guardias: ', guardias)
+  return response.send(guardiasExtendidas)
 })
 
 module.exports = farmaciasRouter

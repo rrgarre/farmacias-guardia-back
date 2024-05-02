@@ -1,15 +1,15 @@
 const rutinasRouter = require('express').Router()
 const puppeteer = require('puppeteer')
-const farmacias = require('../utils/farmacias').farmacias_lucena
+const farmacias = require('../utils/farmacias-Lucena-14900').farmacias_lucena
 const { Sequelize, DataTypes } = require('sequelize')
-const Farmacia = require('../models/farmacia')
-const scrapFunctions = require('../utils/scrapFunctions')
+const GuardiaLucena14900 = require('../models/guardiaLucena14900')
+const scrapFunctionsLucena14900 = require('../utils/scrapFunctionsLucena14900')
 
 rutinasRouter.get('/', async (request, response) => {
 
-  const extraDays = 9
+  const extraDays = 1
 
-  const resultadoMix = await scrapFunctions.getSinceToday(extraDays)
+  const resultadoMix = await scrapFunctionsLucena14900.getSinceToday(extraDays)
 
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,18 +41,24 @@ rutinasRouter.get('/', async (request, response) => {
     // Sincroniza el modelo con la base de datos
     // Utiliza { force: true } solo en desarrollo para re-crear la tabla
     // await Farmacia.sync() 
-    await Farmacia.sync({ force: true }) 
+    await GuardiaLucena14900.sync({ force: true }) 
 
     resultadoMix.map(res => {
+      // en las listas de dia y noche me quedo con las IDs de las farmacias
       const fondoDiaIds = res.fondoDia.map(elem => elem.id)
       const fondoNocheIds = res.fondoNoche.map(elem => elem.id)
-      Farmacia.create({
+      GuardiaLucena14900.create({
         ciudad: res.ciudad,
         fecha: res.fecha,
+        fechaFormateada: res.fechaFormateada,
         horarioDia: res.horarioDia,
-        listadoDia: fondoDiaIds.join(','),
+        horaAperturaDia: res.horaAperturaDia,
+        horaCierreDia: res.horaCierreDia,
+        fondoDia: fondoDiaIds.join(','),
         horarioNoche: res.horarioNoche,
-        listadoNoche: fondoNocheIds.join(',')
+        horaAperturaNoche: res.horaAperturaNoche,
+        horaCierreNoche: res.horaCierreNoche,
+        fondoNoche: fondoNocheIds.join(',')
       })
     })
     

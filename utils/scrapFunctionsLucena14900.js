@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer')
-const farmacias = require('../utils/farmacias').farmacias_lucena
+const farmacias = require('../utils/farmacias-Lucena-14900').farmacias_lucena
 
 const getYear = async () => {
   return 'getYear(): farmacias de guardia del año XXXX'
@@ -69,7 +69,9 @@ const getSinceToday = async (extraDays) => {
   })
   await browser.close()
   
-  const resultadoMix = data.map(elem => {
+
+  const resultadoMix = data.map(elem => { 
+
     const fondoDiaMixed = elem.fondoDia.map(farmacia => {
       return farmacias.find(elem => {
         return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === farmacia
@@ -80,11 +82,33 @@ const getSinceToday = async (extraDays) => {
         return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === farmacia
       })
     })
-    
+
+    // creamos la fecha en formato para ordenar consultas posteriores
+    // aaaa-mm-dd
+    // nos quedamos con la fecha y descartamos 'CORDOBA '
+    let fechaTemp = elem.fecha.split(' ')[1]
+    // tenemos un array con el dia, mes y año
+    fechaTemp = fechaTemp.split('-')
+    // Aseguramos longitudes correctas en la fecha aaaa-mm-dd
+    fechaTemp[1] = fechaTemp[1].padStart(2, '0')
+    const fechaFormateada = fechaTemp.reverse().join('-')
+    // const fechaFormateada = elem.fecha.split(' ')[1].split('-').reverse().join('-')
+
+    // Formateamos las horas de apertura y cierre
+    const horaAperturaDia = elem.horarioDia.split(' ')[1]
+    const horaCierreDia = elem.horarioDia.split(' ')[6]
+    const horaAperturaNoche = elem.horarioNoche.split(' ')[1]
+    const horaCierreNoche = elem.horarioNoche.split(' ')[6]
+
     return {
       ...elem,
       fondoDia: fondoDiaMixed,
-      fondoNoche: fondoNocheMixed
+      fondoNoche: fondoNocheMixed,
+      fechaFormateada: fechaFormateada,
+      horaAperturaDia: horaAperturaDia,
+      horaCierreDia: horaCierreDia,
+      horaAperturaNoche: horaAperturaNoche,
+      horaCierreNoche: horaCierreNoche
     }
   })
   // console.log('NUEVA EJEC: ', new Date().getDate())
