@@ -1,37 +1,47 @@
+// const { isObjectIdOrHexString } = require('mongoose')
 const puppeteer = require('puppeteer')
+// listado de farmacias para cruzar con Scrapping
 const farmacias = require('../utils/farmacias-Lucena-14900').farmacias_lucena
 
+///////////////// Posible función para obtener un año concreto //////////////////////////////
+// NO ESCRITA...
 const getYear = async () => {
   return 'getYear(): farmacias de guardia del año XXXX'
 }
 
+///////////////// Función para obtener 1 + 'extraDays' días de guardia desde hoy ///////////////
 const getSinceToday = async (extraDays) => {
-  const DIAI = 1
-  const DIAF = 31
+  
+  // Hora que determina el cambio de día (por estar la info de madrugada en el día de antes)
   const HOUR_OF_CHANGE = 20
   const MINUTES_OF_CHANGE = 30
   const currentDate = new Date()
-  console.log('current date: ', currentDate)
+  
+  //Ajuste del día por horario de madrugada
+  // Nos ubicamos en el día anterior si son menos de las 'HOUR CHANGE'
+  // Ya que la info de las guardias de madrugada corresponden a los datos del dia anterior
   if(currentDate.getHours() <= HOUR_OF_CHANGE)
     if(currentDate.getMinutes() < MINUTES_OF_CHANGE)
       currentDate.setDate(currentDate.getDate() - 1)
-  //Ajuste del día por horario de madrugada
+
   const currentDay = currentDate.getDate()
   const currentMonth = currentDate.getMonth()+1
+
+  // Días de más que vamos a pedir al Scrapeo (desde el día de hoy)
   // const moreDays = 6
   const moreDays = extraDays
-  // const dia = request.params.dia
-  // console.log('dia: ', dia)
   
+  // Configuración del modo de abrir el navegador virtual que realizará el Scrapeo
   const browser = await puppeteer.launch({
       // headless: false,
       // slowMo:300
   })
+
+  // Abrimos nueva página y vamos a la URL
   const page = await browser.newPage()
-  // await page.goto('https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=1&mes=02&ano=2024&diaf=4&mesf=02&anof=2024')
-  // await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${DIAI}&mes=02&ano=2024&diaf=${DIAF}&mesf=02&anof=2024`)
   await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${currentDay}&mes=${currentMonth}&ano=2024&diaf=${currentDay+moreDays}&mesf=${currentMonth}&anof=2024`)
-  // await page.goto(`https://www.cofco.org/aplicaciones/guardias/imprime2024.php?sltCiudad=13&resultado=1&dia=${dia}&mes=02&ano=2024&diaf=${dia}&mesf=02&anof=2024`)
+
+  // Comenzamos el Scrapping y lo volcamos en 'data'
   const data = await page.evaluate(() => {
     try {
       const contenido = [...document.querySelectorAll('div.supercontenedor')]
@@ -65,22 +75,33 @@ const getSinceToday = async (extraDays) => {
         'message':'no se pudo calcular resultados'
       }
     }
-      
   })
+
+  // cerramos navegación
   await browser.close()
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////// Ahora cruzamos datos con nuestra info de las farmacias /////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   
-
+  // Añadiremos la info de cada farmacia (sólo las IDs) a los listados de fondoDia y fondoNoche
+  // De cada día (cada elem de data, de ahí el .map)
   const resultadoMix = data.map(elem => { 
-
+    // Cambiamos el array de nombres de farmacia conforme llegan del scrapeo
+    // Por las IDS de las farmacias en nuestra BBDD
+    // ** Si quitamos el '.id' del finally. Tendriamos toda la información de la farmacia en un objeto
+    //    pero como este Array resultado debemos pasarlo a String por no poder almacenar arrays en la BBDD,
+    //    Mejor nos quedamos sólo con las IDS y ya en los controllers reconstruimos con la info completa de 
+    //    cada farmacia antes de SERVIR los datos
     const fondoDiaMixed = elem.fondoDia.map(farmacia => {
       return farmacias.find(elem => {
         return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === farmacia
-      })
+      }).id
     })
     const fondoNocheMixed = elem.fondoNoche.map(farmacia => {
       return farmacias.find(elem => {
         return elem.matcher.replaceAll(' ','').replaceAll(',','').toUpperCase() === farmacia
-      })
+      }).id
     })
 
     // creamos la fecha en formato para ordenar consultas posteriores
@@ -94,16 +115,17 @@ const getSinceToday = async (extraDays) => {
     const fechaFormateada = fechaTemp.reverse().join('-')
     // const fechaFormateada = elem.fecha.split(' ')[1].split('-').reverse().join('-')
 
-    // Formateamos las horas de apertura y cierre
+    // Scrappin las horas de apertura y cierre
     const horaAperturaDia = elem.horarioDia.split(' ')[1]
     const horaCierreDia = elem.horarioDia.split(' ')[6]
     const horaAperturaNoche = elem.horarioNoche.split(' ')[1]
     const horaCierreNoche = elem.horarioNoche.split(' ')[6]
 
+    // Aqui retornamos el elemento (guardia de 1 día) pero pasamos a String los Arrays de fondoDia y fondoNoche
     return {
       ...elem,
-      fondoDia: fondoDiaMixed,
-      fondoNoche: fondoNocheMixed,
+      fondoDia: fondoDiaMixed.join(','),
+      fondoNoche: fondoNocheMixed.join(','),
       fechaFormateada: fechaFormateada,
       horaAperturaDia: horaAperturaDia,
       horaCierreDia: horaCierreDia,
@@ -111,10 +133,9 @@ const getSinceToday = async (extraDays) => {
       horaCierreNoche: horaCierreNoche
     }
   })
-  // console.log('NUEVA EJEC: ', new Date().getDate())
-  // console.log(`El día actual es: ${currentDay}`)
-  // console.log(`La hora actual es: ${currentDate.getHours()}`)
-  // return 'getSinceToday(): farmacias de guardia desde hoy'
+  
+  // Devolvemos el data del scrapping con los datos cruzados de las farmacias 
+  // (un String con las Ids de las mismas separadas por ',')
   return resultadoMix
 }
 

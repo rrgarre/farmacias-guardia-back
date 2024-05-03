@@ -45,8 +45,8 @@ rutinasRouter.get('/', async (request, response) => {
 
     resultadoMix.map(res => {
       // en las listas de dia y noche me quedo con las IDs de las farmacias
-      const fondoDiaIds = res.fondoDia.map(elem => elem.id)
-      const fondoNocheIds = res.fondoNoche.map(elem => elem.id)
+      // const fondoDiaIds = res.fondoDia.map(elem => elem.id)
+      // const fondoNocheIds = res.fondoNoche.map(elem => elem.id)
       GuardiaLucena14900.create({
         ciudad: res.ciudad,
         fecha: res.fecha,
@@ -54,11 +54,13 @@ rutinasRouter.get('/', async (request, response) => {
         horarioDia: res.horarioDia,
         horaAperturaDia: res.horaAperturaDia,
         horaCierreDia: res.horaCierreDia,
-        fondoDia: fondoDiaIds.join(','),
+        // fondoDia: fondoDiaIds.join(','),
+        fondoDia: res.fondoDia,
         horarioNoche: res.horarioNoche,
         horaAperturaNoche: res.horaAperturaNoche,
         horaCierreNoche: res.horaCierreNoche,
-        fondoNoche: fondoNocheIds.join(',')
+        // fondoNoche: fondoNocheIds.join(',')
+        fondoNoche: res.fondoNoche
       })
     })
     
@@ -69,9 +71,6 @@ rutinasRouter.get('/', async (request, response) => {
     // await sequelize.close()
   }
 
-
-
-  // return response.send('Hola desde Router de Rutinas')
   return response.send(resultadoMix)
 })
 
