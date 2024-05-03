@@ -1,7 +1,16 @@
 require('dotenv').config()
 
 const PORT = process.env.PORT
+
+// DDBB MongoBD
 const MONGODB_URI = process.env.MONGODB_URI
+
+// SQL DDBB
+const DDBB_NAME = process.env.DDBB_NAME
+const DDBB_USER = process.env.DDBB_USER
+const DDBB_PASSWORD = process.env.DDBB_PASSWORD
+const DDBB_HOST = process.env.DDBB_HOST
+
 if(process.env.NODE_ENV === "test"){
   console.log('estamos en modo test:..............')
   const MONGODB_URI = process.env.MONGODB_URI_TEST
@@ -17,5 +26,9 @@ module.exports = {
   SECRET_FOR_JWT,
   ENABLE_SSL,
   SSL_KEY_FILE,
-  SSL_CERT_FILE
+  SSL_CERT_FILE,
+  DDBB_NAME,
+  DDBB_USER,
+  DDBB_PASSWORD,
+  DDBB_HOST
 }

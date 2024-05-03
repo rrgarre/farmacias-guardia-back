@@ -1,15 +1,24 @@
-// database.js
+const config = require('./utils/config')
 
 const { Sequelize } = require('sequelize');
 
 let sequelize
 try {
+  // sequelize = new Sequelize(
+  //   'u598717880_ejemplo1', 
+  //   'u598717880_ejemplo1', 
+  //   'c7@T&LKMX', 
+  //   {
+  //     host: 'srv1123.hstgr.io',
+  //     dialect: 'mysql'
+  //   }
+  // )
   sequelize = new Sequelize(
-    'u598717880_ejemplo1', 
-    'u598717880_ejemplo1', 
-    'c7@T&LKMX', 
+    config.DDBB_NAME,
+    config.DDBB_USER,
+    config.DDBB_PASSWORD,
     {
-      host: 'srv1123.hstgr.io',
+      host: config.DDBB_HOST,
       dialect: 'mysql'
     }
   )
