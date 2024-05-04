@@ -12,7 +12,7 @@ const GuardiaLucena14900 = sequelize.define(
       type: DataTypes.STRING
     },
     fechaFormateada: {
-      type: DataTypes.STRING
+      type: DataTypes.DATE
     },
     horarioDia: {
       type: DataTypes.STRING

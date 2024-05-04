@@ -2,11 +2,15 @@ const farmaciasRouter = require('express').Router()
 const puppeteer = require('puppeteer')
 const farmacias = require('../utils/farmacias-Lucena-14900').farmacias_lucena
 const GuardiaLucena14900 = require('../models/guardiaLucena14900')
+// Objeto para operaciones de filtrado en BBDD
+const {Op} = require('sequelize')
 
 
 
 farmaciasRouter.get('/', async (request, response) => {
-
+  // Esta función realiza el Scrapping y sirve datos todo en uno.
+  // Es una versión previa del desarrollo que no se usa.
+  // Se eliminará cuando no sirva ni de consulta.
     const DIAI = 1
     const DIAF = 31
     const HOUR_OF_CHANGE = 20
@@ -100,19 +104,56 @@ farmaciasRouter.get('/', async (request, response) => {
     return response.send(resultadoMix)
 })
 
+//////////////////////// EndPoint para pedir farmacias de guardia de Lucena (Cordoba) ////////////////////////
 farmaciasRouter.get('/Lucena-14900', async (request, response) => {
-  const guardias = await GuardiaLucena14900.findAll()
+  
+  // fechas para acotar la consulta
+  const fechaInicio = '2024-05-09'
+  const fechaFin = '2024-05-18'
+  // Pedimos todas las guardias de Lucena
+  // Esto debe refinarse para hacer una petición más exacta
+  // const guardias = await GuardiaLucena14900.findAll()
+  const guardias = await GuardiaLucena14900.findAll({
+    where: {
+      fechaFormateada: {
+        [Op.between]: [fechaInicio, fechaFin]
+      }
+    },
+    order: [
+      ['fechaFormateada', 'ASC'] // Ordenar por el campo 'nombre' en orden ascendente
+    ]
+  })
+
+  // Extendemos la info de farmacias.
+  // Transformamos el String de IDs de farmacias
+  // En un array con la info completa de las farmacias referidas
   const guardiasExtendidas = guardias.map(dia => {
     const fondoDiaArray = dia.fondoDia.split(',')
     console.log('FondoDiaArray: ', fondoDiaArray)
     const fondoDiaExtendido = fondoDiaArray.map(farmaciaId => {
       return farmacias.find(f=>f.id === farmaciaId)
     })
-    console.log('FondoDiaExtendido: ', fondoDiaExtendido)
+    const fondoNocheArray = dia.fondoNoche.split(',')
+    console.log('FondoNocheArray: ', fondoNocheArray)
+    const fondoNocheExtendido = fondoNocheArray.map(farmaciaId => {
+      return farmacias.find(f=>f.id === farmaciaId)
+    })
+    
 
     // :::: Construir el objeto campo a campo
     return {
-      dia
+      id: dia.id,
+      ciudad: dia.ciudad,
+      fecha: dia.fecha,
+      fechaFormateada: dia.fechaFormateada,
+      horarioDia: dia.horarioDia,
+      horaAperturaDia: dia.horaAperturaDia,
+      horaCierreDia: dia.horaCierreDia,
+      fondoDia: fondoDiaExtendido,
+      horarioNoche: dia.horarioNoche,
+      horaAperturaNoche: dia.horaAperturaNoche,
+      horaCierreNoche: dia.horaCierreNoche,
+      fondoNoche: fondoNocheExtendido
     }
   })
 
