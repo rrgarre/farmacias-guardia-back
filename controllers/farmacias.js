@@ -105,13 +105,17 @@ farmaciasRouter.get('/', async (request, response) => {
 })
 
 //////////////////////// EndPoint para pedir farmacias de guardia de Lucena (Cordoba) ////////////////////////
-farmaciasRouter.get('/Lucena-14900', async (request, response) => {
+farmaciasRouter.get('/Lucena-14900/:dias', async (request, response) => {
   
   // fechas para acotar la consulta
-  const fechaInicio = '2024-05-09'
-  const fechaFin = '2024-05-18'
-  // Pedimos todas las guardias de Lucena
-  // Esto debe refinarse para hacer una petición más exacta
+  const diasResultado = parseInt(request.params.dias)
+  const fechaActual = new Date()
+  const fechaInicio = fechaActual.toISOString().split('T')[0]
+  fechaActual.setDate(fechaActual.getDate() + diasResultado)
+  const fechaFin = fechaActual.toISOString().split('T')[0]
+
+  // Pedimos las guardias de Lucena entre fechas
+  // Y ordenamos segun el valor fechaFormateada
   // const guardias = await GuardiaLucena14900.findAll()
   const guardias = await GuardiaLucena14900.findAll({
     where: {
@@ -129,12 +133,12 @@ farmaciasRouter.get('/Lucena-14900', async (request, response) => {
   // En un array con la info completa de las farmacias referidas
   const guardiasExtendidas = guardias.map(dia => {
     const fondoDiaArray = dia.fondoDia.split(',')
-    console.log('FondoDiaArray: ', fondoDiaArray)
+    // console.log('FondoDiaArray: ', fondoDiaArray)
     const fondoDiaExtendido = fondoDiaArray.map(farmaciaId => {
       return farmacias.find(f=>f.id === farmaciaId)
     })
     const fondoNocheArray = dia.fondoNoche.split(',')
-    console.log('FondoNocheArray: ', fondoNocheArray)
+    // console.log('FondoNocheArray: ', fondoNocheArray)
     const fondoNocheExtendido = fondoNocheArray.map(farmaciaId => {
       return farmacias.find(f=>f.id === farmaciaId)
     })
