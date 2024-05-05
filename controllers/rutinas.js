@@ -5,9 +5,10 @@ const { Sequelize, DataTypes } = require('sequelize')
 const GuardiaLucena14900 = require('../models/guardiaLucena14900')
 const scrapFunctionsLucena14900 = require('../utils/scrapFunctionsLucena14900')
 
-rutinasRouter.get('/Lucena', async (request, response) => {
+rutinasRouter.get('/Lucena-14900/:dias', async (request, response) => {
 
-  const extraDays = 99
+  // const extraDays = 99
+  const extraDays = parseInt(request.params.dias)
 
   const resultadoMix = await scrapFunctionsLucena14900.getSinceToday(extraDays)
 
