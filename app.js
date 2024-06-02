@@ -70,7 +70,8 @@ app.use('/api/login', loginRouter)
 app.use('/api/notes', notesRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/farmacias', farmaciasRouter)
-app.use('/api/rutinas', rutinasRouter)
+// Paramos este endpoint para Desarrollo, para evitar refrescos de BBDD de momento
+// app.use('/api/rutinas', rutinasRouter)
 
 // Control de errores
 app.use(unknowEndpoint)
